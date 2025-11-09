@@ -11,7 +11,8 @@ namespace WebApiShop.Controllers
     public class UsersController : ControllerBase
     {
 
-        string _filePath = "C:\\Users\\yyy\\Desktop\\WEB API\\newUsers.txt";
+        string _filePath = "C:\\Users\\yyy\\Desktop\\h.w\\WEB API\\newUsers.txt";
+     
         // GET: api/<UsersController>
         [HttpGet]
         public IEnumerable<string> Get()
@@ -40,6 +41,8 @@ namespace WebApiShop.Controllers
         [HttpPost]
         public ActionResult<User> Post([FromBody] User user)
         {
+            if (!ModelState.IsValid)
+                return ValidationProblem(ModelState); // ← כאן
 
             int numberOfUsers = System.IO.File.ReadLines(_filePath).Count();
             user.id = numberOfUsers + 1;
@@ -51,7 +54,8 @@ namespace WebApiShop.Controllers
         [HttpPost("Login")]
         public ActionResult<User> Login([FromBody] User user)
         {
-            
+            if (!ModelState.IsValid)
+                return ValidationProblem(ModelState);
             using (StreamReader reader = System.IO.File.OpenText(_filePath))
             {
                 string? currentUserInFile;
