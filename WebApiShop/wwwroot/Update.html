@@ -4,18 +4,32 @@
     <meta charset="utf-8" />
     <title>login</title>
     <script src="Update.js" defer></script>
+    <script src="Password.js" defer></script>
     <style>
-        h1{
-            text-align:center;
-            font-size:50px;
-
+        h1 {
+            text-align: center;
+            font-size: 50px;
         }
-        .newUser{
-            display:flex;
-            flex-direction:column;
-            justify-content:center;
-            align-content:center;
-            align-items:center;
+
+        .newUser {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-content: center;
+            align-items: center;
+        }
+
+        .strength {
+            height: 2vh;
+            width: 20vw;
+            margin: 2vw;
+            background-color: gray;
+            border-radius: 10px;
+        }
+
+        .progressBar {
+            width: 20vw;
+            height: 3vh;
         }
     </style>
 </head>
@@ -31,6 +45,9 @@
         <input type="text" id="lastName" name="lastName" required />
         <lable for="password">סיסמא</lable>
         <input type="password" id="password" name="password" required />
+        <button onClick="checkPasswordLevel()" class="check">בדוק רמת סיסמא</button>
+        <progress class="progressBar" max="100" value="0"></progress>
+        <!--<div class="strength"></div>-->
         <button onClick="updateResponse()" class="button">עדכן</button>
     </div>
 </body>

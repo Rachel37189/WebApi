@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <script src="Home.js" defer></script>
+    <script src="Password.js" defer></script>
     <title>דף שיצרנו לבד</title>
     <style>
         .content {
@@ -26,6 +27,18 @@
 
         button {
             margin-top: 1vh;
+        }
+        .strength {
+            height: 2vh;
+            width: 20vw;
+            margin: 2vw;
+            background-color: gray;
+            border-radius: 10px;
+        }
+
+        .progressBar {
+            width: 20vw;
+            height:3vh;
         }
     </style>
 </head>
@@ -51,6 +64,9 @@
             <input type="text" id="lastName" name="lastName" required />
             <lable for="password">סיסמא</lable>
             <input type="password" id="password" name="password" required />
+            <button onClick="checkPasswordLevel()" class="check">בדוק רמת סיסמא</button>
+            <progress class="progressBar" max="100" value="0"></progress>
+            <!--<div class="strength"></div>-->
             <button onClick="postResponse()" class="button">שליחה</button>
         </div>
 
