@@ -7,13 +7,13 @@ using Entities;
 using Repository;
 namespace Services
 {
-    public class PasswordService
+    public class PasswordService : IPasswordService
     {
         public PasswordEntity Level(string password)
         {
-            var _result=Zxcvbn.Core.EvaluatePassword(password);
+            var _result = Zxcvbn.Core.EvaluatePassword(password);
             int _levelPass = _result.Score;
-            PasswordEntity _passRes= new PasswordEntity();
+            PasswordEntity _passRes = new PasswordEntity();
             _passRes.Password = password;
             _passRes.Strength = _levelPass;
             return _passRes;

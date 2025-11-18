@@ -2,27 +2,35 @@
 using Repository;
 namespace Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
-        UserRepository userRepository = new UserRepository();
-        PasswordService passwordService = new PasswordService();
+        IUserRepository _userRepository;
+        IPasswordService _passwordService;
+
+        public UserService (IUserRepository userRepository, IPasswordService passwordService)
+        {
+            _userRepository = userRepository;
+            _passwordService = passwordService;
+        }
         public User GetUserById(int id)
         {
-            return userRepository.GetUserById(id);
+            return _userRepository.GetUserById(id);
         }
-        public User addUser(User user) {
-            if (passwordService.Level(user.passWord).Strength <= 2)
+        public User addUser(User user)
+        {
+            if (_passwordService.Level(user.passWord).Strength <= 2)
                 return null;
-                return null;
-            return userRepository.addUser(user);
+            
+            return _userRepository.addUser(user);
         }
         public void updateUser(int id, User user)
         {
-            userRepository.updateUser(id, user);
+            _userRepository.updateUser(id, user);
 
         }
-        public User login(User user) { 
-            return userRepository.login(user);
+        public User login(User user)
+        {
+            return _userRepository.login(user);
         }
     }
 }
