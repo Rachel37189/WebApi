@@ -9,15 +9,14 @@ namespace Services
 {
     public class PasswordService
     {
-        public PasswordEntity Level(string password)
+        public PasswordEntity CheckPasswordStrength(string password)
         {
-            var _result=Zxcvbn.Core.EvaluatePassword(password);
-            int _levelPass = _result.Score;
-            PasswordEntity _passRes= new PasswordEntity();
-            _passRes.Password = password;
-            _passRes.Strength = _levelPass;
-            return _passRes;
-
+            var result = Zxcvbn.Core.EvaluatePassword(password);
+            int levelPass = result.Score;
+            PasswordEntity passRes = new PasswordEntity();
+            passRes.Password = password;
+            passRes.Strength = levelPass;
+            return passRes;
         }
     }
 }
