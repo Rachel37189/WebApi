@@ -5,60 +5,63 @@ namespace Repository
 {
     public class UserRepository
     {
-        string _filePath = "newUsers.txt";
+        private readonly string _filePath = "newUsers.txt";
         public User GetUserById(int id)
         {
             using (StreamReader reader = System.IO.File.OpenText(_filePath))
             {
-                string? _currentUserInFile;
-                while ((_currentUserInFile = reader.ReadLine()) != null)
+                string? currentUserInFile;
+                while ((currentUserInFile = reader.ReadLine()) != null)
                 {
-                    User? _user = JsonSerializer.Deserialize<User>(_currentUserInFile);
-                    if (_user != null && _user.id == id)
-                        return _user;
+                    User? user = JsonSerializer.Deserialize<User>(currentUserInFile);
+                    if (user != null && user.Id == id)
+                        return user;
                 }
             }
             return null;
         }
 
-        public User addUser(User user)
+        public User AddUser(User user)
         {
-            int _numberOfUsers = System.IO.File.ReadLines(_filePath).Count();
-            user.id = _numberOfUsers + 1;
-            string _userJson = JsonSerializer.Serialize(user);
-            System.IO.File.AppendAllText(_filePath, _userJson + Environment.NewLine);
+            int numberOfUsers = System.IO.File.ReadLines(_filePath).Count();
+            user.Id = numberOfUsers + 1;
+            string userJson = JsonSerializer.Serialize(user);
+            System.IO.File.AppendAllText(_filePath, userJson + Environment.NewLine);
             return user;
-
         }
-        public void updateUser(int id, User user) {
-            string _textToReplace = string.Empty;
+        
+        public void UpdateUser(int id, User user)
+        {
+            string textToReplace = string.Empty;
             using (StreamReader reader = System.IO.File.OpenText(_filePath))
             {
-                string? _currentUserInFile;
-                while ((_currentUserInFile = reader.ReadLine()) != null)
+                string? currentUserInFile;
+                while ((currentUserInFile = reader.ReadLine()) != null)
                 {
-                    User? _user = JsonSerializer.Deserialize<User>(_currentUserInFile);
-                    if (_user != null && _user.id == id)
-                        _textToReplace = _currentUserInFile;
+                    User? existingUser = JsonSerializer.Deserialize<User>(currentUserInFile);
+                    if (existingUser != null && existingUser.Id == id)
+                        textToReplace = currentUserInFile;
                 }
             }
 
-            if (_textToReplace != string.Empty)
+            if (textToReplace != string.Empty)
             {
-                string _text = System.IO.File.ReadAllText(_filePath);
-                _text = _text.Replace(_textToReplace, JsonSerializer.Serialize(user));
-                System.IO.File.WriteAllText(_filePath, _text);
+                string text = System.IO.File.ReadAllText(_filePath);
+                text = text.Replace(textToReplace, JsonSerializer.Serialize(user));
+                System.IO.File.WriteAllText(_filePath, text);
             }
         }
-        public User login(User user) {
+        
+        public User Login(User user)
+        {
             using (StreamReader reader = System.IO.File.OpenText(_filePath))
             {
-                string? _currentUserInFile;
-                while ((_currentUserInFile = reader.ReadLine()) != null)
+                string? currentUserInFile;
+                while ((currentUserInFile = reader.ReadLine()) != null)
                 {
-                    User? _user = JsonSerializer.Deserialize<User>(_currentUserInFile);
-                    if (_user != null && _user.userName == user.userName && _user.passWord == user.passWord)
-                        return _user;
+                    User? userFromFile = JsonSerializer.Deserialize<User>(currentUserInFile);
+                    if (userFromFile != null && userFromFile.UserName == user.UserName && userFromFile.Password == user.Password)
+                        return userFromFile;
                 }
             }
             return null;

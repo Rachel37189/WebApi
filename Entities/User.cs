@@ -6,16 +6,14 @@ namespace Entities
     {
         [Required(ErrorMessage = "חובה להזין אימייל")]
         [EmailAddress(ErrorMessage = "כתובת אימייל לא חוקית")]
-        public string userName { get; set; } = string.Empty;
+        public string UserName { get; set; } = string.Empty;
 
+        public string FirstName { get; set; } = string.Empty;
 
+        public string LastName { get; set; } = string.Empty;
 
-        public string fName { get; set; } = string.Empty;
-
-
-        public string lName { get; set; } = string.Empty;
-
-        public string passWord { get; set; } = string.Empty;
-        public int id { get; set; }
+        public string Password { get; set; } = string.Empty;
+        
+        public int Id { get; set; }
     }
 }

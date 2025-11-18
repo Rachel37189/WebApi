@@ -4,25 +4,29 @@ namespace Services
 {
     public class UserService
     {
-        UserRepository userRepository = new UserRepository();
-        PasswordService passwordService = new PasswordService();
+        private readonly UserRepository _userRepository = new UserRepository();
+        private readonly PasswordService _passwordService = new PasswordService();
+        
         public User GetUserById(int id)
         {
-            return userRepository.GetUserById(id);
+            return _userRepository.GetUserById(id);
         }
-        public User addUser(User user) {
-            if (passwordService.Level(user.passWord).Strength <= 2)
-                return null;
-                return null;
-            return userRepository.addUser(user);
-        }
-        public void updateUser(int id, User user)
+        
+        public User AddUser(User user)
         {
-            userRepository.updateUser(id, user);
-
+            if (_passwordService.CheckPasswordStrength(user.Password).Strength <= 2)
+                return null;
+            return _userRepository.AddUser(user);
         }
-        public User login(User user) { 
-            return userRepository.login(user);
+        
+        public void UpdateUser(int id, User user)
+        {
+            _userRepository.UpdateUser(id, user);
+        }
+        
+        public User Login(User user)
+        {
+            return _userRepository.Login(user);
         }
     }
 }
