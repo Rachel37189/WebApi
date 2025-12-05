@@ -6,11 +6,11 @@
     const pass = document.querySelector("#password");
 
     const postData = {
-    userName: userN.value,
-    fName: fName.value,
-    lName: lName.value,
-    passWord: pass.value,
-    id:0
+    UserName: userN.value,
+    FirstName: fName.value,
+    LastName: lName.value,
+    Password: pass.value,
+    Id:0
 };
 
     const responsePost = await fetch("https://localhost:44320/api/Users", {
@@ -21,8 +21,15 @@
     body: JSON.stringify(postData)
 });
 
-const dataPost = await responsePost;
-    alert("משתמש נוסף בהצלחה");
+    const dataPost = await responsePost.json();
+    sessionStorage.setItem("user", JSON.stringify(dataPost))
+    if (responsePost.status == 201)
+        alert("משתמש נוסף בהצלחה");
+    else if (responsePost.status == 400)
+        alert("סיסמא חלשה נסה שנית");
+    else
+        alert("תהליך ההרשמה נכשל...  נסה שוב");
+    
 }
 
 const login = async () => {
@@ -30,11 +37,11 @@ const login = async () => {
     const pass = document.querySelector("#pass");
     const postDataLogin = {
 
-        userName: userN,
-        fName: "",
-        lName: "",
-        passWord: pass.value,
-        id: 0
+        UserName: userN,
+        FirstName: "",
+        LastName: "",
+        Password: pass.value,
+        Id: 0
     };
 
     const responsePostLogin = await fetch("https://localhost:44320/api/Users/Login", {
@@ -46,14 +53,16 @@ const login = async () => {
 
     });
 
-    const dataPostLogin = await responsePostLogin.json();
-    if (dataPostLogin.status == 204)
-        alert("אופסססססססססס המשתמש לא קיים")
-    else {
+   
+    if (responsePostLogin.ok) {
+        const dataPostLogin = await responsePostLogin.json();
         sessionStorage.setItem("user", JSON.stringify(dataPostLogin))
         alert("wellcome!!!!!!!")
         window.location.href = "../Update.html"
-        
+    }
+    else {
+
+          alert("אופסססססססססס המשתמש לא קיים")
     }
       
 

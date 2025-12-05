@@ -29,41 +29,42 @@ namespace WebApiShop.Controllers
 
         // GET api/<UsersController>/5
         [HttpGet("{id}")]
-        public ActionResult<User> Get(int id)
+        public async Task<ActionResult<User>> Get(int id)
         {
            
-            User user= _userService.GetUserById(id);
+            User user= await _userService.GetUserById(id);
             if (user == null)
                    return NoContent();
             return Ok(user);
         }
         // POST api/<UsersController>
         [HttpPost]
-        public ActionResult<User> Post([FromBody] User user)
+        public async Task<ActionResult<User>> Post([FromBody] User user)
         {
-            User _user = _userService.addUser(user);
+           User _user = await _userService.addUser(user);
             if (_user == null)
             {
                 return BadRequest("סיסמא חלשה - נסה סיסמא שונה");
             }
-            return CreatedAtAction(nameof(Get), new { id = user.id }, user);
+            return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
 
         }
 
         [HttpPost("Login")]
-        public ActionResult<User> Login([FromBody] User user)
+        public async Task<ActionResult<User>> Login([FromBody] User user)
         {
-            User _user = _userService.login(user);
+           User _user = await _userService.login(user);
             if (_user == null)
                 return NoContent() ;
-            return Ok(user);
+            return Ok(_user);
 
         }
         // PUT api/<UsersController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] User user)
+        public async Task<IActionResult> Put(int id, [FromBody] User user)
         {
-            _userService.updateUser(id, user);
+            await _userService.updateUser(id, user);
+            return Ok(user);
         }
 
         // DELETE api/<UsersController>/5
