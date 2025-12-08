@@ -2,7 +2,6 @@
 #nullable disable
 using Entities;
 using Microsoft.EntityFrameworkCore;
-using Repository;
 using System;
 using System.Collections.Generic;
 
@@ -15,17 +14,87 @@ public partial class WebApiShop_215602996Context : DbContext
     {
     }
 
+    public virtual DbSet<Category> Categories { get; set; }
+
+    public virtual DbSet<Order> Orders { get; set; }
+
+    public virtual DbSet<OrderItem> OrderItems { get; set; }
+
+    public virtual DbSet<Product> Products { get; set; }
+
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Category>(entity =>
+        {
+            entity.Property(e => e.CategoryId).HasColumnName("Category_Id");
+            entity.Property(e => e.CategoryName)
+                .IsRequired()
+                .HasMaxLength(30)
+                .IsFixedLength()
+                .HasColumnName("Category_name");
+        });
+
+        modelBuilder.Entity<Order>(entity =>
+        {
+            entity.Property(e => e.OrderId).HasColumnName("Order_Id");
+            entity.Property(e => e.OrderDate).HasColumnName("Order_Date");
+            entity.Property(e => e.OrderSum).HasColumnName("Order_sum");
+            entity.Property(e => e.UserId).HasColumnName("User_Id");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Orders_Users");
+        });
+
+        modelBuilder.Entity<OrderItem>(entity =>
+        {
+            entity.ToTable("Order_Item");
+
+            entity.Property(e => e.OrderItemId).HasColumnName("Order_Item_Id");
+            entity.Property(e => e.OrderId).HasColumnName("Order_Id");
+            entity.Property(e => e.ProductId).HasColumnName("Product_Id");
+
+            entity.HasOne(d => d.Order).WithMany(p => p.OrderItems)
+                .HasForeignKey(d => d.OrderId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Order_Item_Orders");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.OrderItems)
+                .HasForeignKey(d => d.ProductId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Order_Item_Products");
+        });
+
+        modelBuilder.Entity<Product>(entity =>
+        {
+            entity.Property(e => e.ProductId).HasColumnName("Product_Id");
+            entity.Property(e => e.CategoryId).HasColumnName("Category_Id");
+            entity.Property(e => e.Description)
+                .HasMaxLength(500)
+                .IsFixedLength();
+            entity.Property(e => e.ProductName)
+                .IsRequired()
+                .HasMaxLength(30)
+                .IsFixedLength()
+                .HasColumnName("Product_Name");
+
+            entity.HasOne(d => d.Category).WithMany(p => p.Products)
+                .HasForeignKey(d => d.CategoryId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Categories_Products");
+        });
+
         modelBuilder.Entity<User>(entity =>
         {
+            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.FirstName)
-                .HasMaxLength(30)
+                .HasMaxLength(20)
                 .IsFixedLength();
             entity.Property(e => e.LastName)
-                .HasMaxLength(30)
+                .HasMaxLength(20)
                 .IsFixedLength();
             entity.Property(e => e.Password)
                 .IsRequired()
@@ -33,14 +102,12 @@ public partial class WebApiShop_215602996Context : DbContext
                 .IsFixedLength();
             entity.Property(e => e.UserName)
                 .IsRequired()
-                .HasMaxLength(30)
+                .HasMaxLength(50)
                 .IsFixedLength();
         });
 
         OnModelCreatingPartial(modelBuilder);
     }
-
-
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }
