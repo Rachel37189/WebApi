@@ -8,7 +8,7 @@ namespace Repository
     public class UserRepository : IUserRepository
     {
 
-        WebApiShop_215602996Context _webApiShopContext;
+        private readonly WebApiShop_215602996Context _webApiShopContext;
         public UserRepository(WebApiShop_215602996Context webApiShopContext)
         {
             _webApiShopContext = webApiShopContext;
@@ -18,20 +18,20 @@ namespace Repository
             return await _webApiShopContext.Users.FindAsync(id);
         }
                                                                                                                      
-        public  async Task<User> addUser(User user)
+        public  async Task<User> AddUser(User user)
         {
             await _webApiShopContext.Users.AddAsync(user);
             await _webApiShopContext.SaveChangesAsync();
             return  user;
 
         }
-        public async Task updateUser(int id, User user)
+        public async Task UpdateUser(int id, User user)
         {
              _webApiShopContext.Users.Update(user);
             //_webApiShopContext.Users.Update(user);
             await _webApiShopContext.SaveChangesAsync();
         }
-        public async Task<User> login(User user)
+        public async Task<User> Login(User user)
         {
             return await _webApiShopContext.Users.FirstOrDefaultAsync(x => x.UserName == user.UserName && x.Password == user.Password);
         }

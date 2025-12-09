@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
-using static WebApiShop.Controllers.UsersController;
 using Entities;
 using Repository;
 using Services;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace WebApiShop.Controllers
 {
@@ -14,17 +11,10 @@ namespace WebApiShop.Controllers
     public class UsersController : ControllerBase
     {
 
-        IUserService _userService ;
+        private readonly IUserService _userService ;
         public UsersController(IUserService userService)
         {
             _userService = userService;
-        }
-
-        // GET: api/<UsersController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
         }
 
         // GET api/<UsersController>/5
@@ -34,14 +24,14 @@ namespace WebApiShop.Controllers
            
             User user= await _userService.GetUserById(id);
             if (user == null)
-                   return NoContent();
+                   return NotFound();
             return Ok(user);
         }
         // POST api/<UsersController>
         [HttpPost]
         public async Task<ActionResult<User>> Post([FromBody] User user)
         {
-           User _user = await _userService.addUser(user);
+           User _user = await _userService.AddUser(user);
             if (_user == null)
             {
                 return BadRequest("סיסמא חלשה - נסה סיסמא שונה");
@@ -53,9 +43,9 @@ namespace WebApiShop.Controllers
         [HttpPost("Login")]
         public async Task<ActionResult<User>> Login([FromBody] User user)
         {
-           User _user = await _userService.login(user);
+           User _user = await _userService.Login(user);
             if (_user == null)
-                return NoContent() ;
+                return Unauthorized("Invalid email or password.") ;
             return Ok(_user);
 
         }
@@ -63,8 +53,8 @@ namespace WebApiShop.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] User user)
         {
-            await _userService.updateUser(id, user);
-            return Ok(user);
+            await _userService.UpdateUser(id, user);
+            return NoContent();
         }
 
         // DELETE api/<UsersController>/5
@@ -73,4 +63,3 @@ namespace WebApiShop.Controllers
         {
         }
     }
-}
