@@ -4,8 +4,8 @@ namespace Services
 {
     public class UserService : IUserService
     {
-        IUserRepository _userRepository;
-        IPasswordService _passwordService;
+        private readonly IUserRepository _userRepository;
+        private readonly IPasswordService _passwordService;
 
         public UserService (IUserRepository userRepository, IPasswordService passwordService)
         {
@@ -16,21 +16,21 @@ namespace Services
         {
             return await _userRepository.GetUserById(id);
         }
-        public async Task<User> addUser(User user)
+        public async Task<User> AddUser(User user)
         {
-            if (_passwordService.Level(user.Password).Strength <= 2)
+            if (_passwordService.CheckPasswordStrength(user.Password).Strength <= 2)
                 return null;
             
-            return await _userRepository.addUser(user);
+            return await _userRepository.AddUser(user);
         }
-        public async Task updateUser(int id, User user)
+        public async Task UpdateUser(int id, User user)
         {
-            await _userRepository.updateUser(id, user);
+            await _userRepository.UpdateUser(id, user);
 
         }
-        public async Task<User> login(User user)
+        public async Task<User> Login(User user)
         {
-            return await _userRepository.login(user);
+            return await _userRepository.Login(user);
         }
     }
 }
