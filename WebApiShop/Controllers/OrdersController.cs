@@ -4,6 +4,7 @@ using static WebApiShop.Controllers.UsersController;
 using Entities;
 using Repository;
 using Services;
+using DTOs;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,28 +21,28 @@ namespace WebApiShop.Controllers
             _orderService = orderService;
         }
 
-        // GET: api/<UsersController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        //// GET: api/<UsersController>
+        //[HttpGet]
+        //public IEnumerable<string> Get()
+        //{
+        //    return new string[] { "value1", "value2" };
+        //}
 
         // GET api/<UsersController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Order>> Get(int id)
+        public async Task<ActionResult<OrderDTO>> Get(int id)
         {
            
-            Order order= await _orderService.GetOrderById(id);
+            OrderDTO order= await _orderService.GetOrderById(id);
             if (order == null)
                    return NoContent();
             return Ok(order);
         }
         // POST api/<UsersController>
         [HttpPost]
-        public async Task<ActionResult<Order>> Post([FromBody] Order order)
+        public async Task<ActionResult<OrderDTO>> Post([FromBody] OrderDTO order)
         {
-            Order _order = await _orderService.addOrder(order);
+            OrderDTO _order = await _orderService.addOrder(order);
             if (_order == null)
             {
                 return BadRequest();

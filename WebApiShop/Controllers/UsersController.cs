@@ -4,6 +4,7 @@ using static WebApiShop.Controllers.UsersController;
 using Entities;
 using Repository;
 using Services;
+using DTOs;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -29,19 +30,19 @@ namespace WebApiShop.Controllers
 
         // GET api/<UsersController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> Get(int id)
+        public async Task<ActionResult<UserDTO>> Get(int id)
         {
            
-            User user= await _userService.GetUserById(id);
+            UserDTO user= await _userService.GetUserById(id);
             if (user == null)
                    return NoContent();
             return Ok(user);
         }
         // POST api/<UsersController>
         [HttpPost]
-        public async Task<ActionResult<User>> Post([FromBody] User user)
+        public async Task<ActionResult<UserDTO>> Post([FromBody] User user)
         {
-           User _user = await _userService.addUser(user);
+           UserDTO _user = await _userService.addUser(user);
             if (_user == null)
             {
                 return BadRequest("סיסמא חלשה - נסה סיסמא שונה");
@@ -51,9 +52,9 @@ namespace WebApiShop.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<ActionResult<User>> Login([FromBody] User user)
+        public async Task<ActionResult<UserDTO>> Login([FromBody] User user)
         {
-           User _user = await _userService.login(user);
+           UserDTO _user = await _userService.login(user);
             if (_user == null)
                 return NoContent() ;
             return Ok(_user);
