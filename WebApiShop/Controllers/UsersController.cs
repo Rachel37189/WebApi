@@ -14,12 +14,17 @@ namespace WebApiShop.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-
-        IUserService _userService ;
-        public UsersController(IUserService userService)
+        private readonly ILogger<UsersController> _logger;
+        public UsersController(ILogger<UsersController> logger, IUserService userService)
         {
+            _logger = logger;
             _userService = userService;
         }
+        IUserService _userService ;
+        //public UsersController(IUserService userService)
+        //{
+        //    _userService = userService;
+        //}
 
         // GET: api/<UsersController>
         [HttpGet]
@@ -55,8 +60,12 @@ namespace WebApiShop.Controllers
         public async Task<ActionResult<UserDTO>> Login([FromBody] User user)
         {
            UserDTO _user = await _userService.login(user);
-            if (_user == null)
+            if (_user == null) {
+                _logger.LogInformation("Login failed: UserName={UserName},FirstName={FirstName},LastName={LastName}", user?.UserName,user?.FirstName, user?.LastName);
                 return NoContent() ;
+            }
+            _logger.LogInformation("Login success: UserName={UserName},FirstName={FirstName},LastName={LastName}",
+             _user.UserName, _user.FirstName, _user.LastName);
             return Ok(_user);
 
         }

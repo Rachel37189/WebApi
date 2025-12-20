@@ -47,7 +47,8 @@ namespace WebApiShop.Controllers
             {
                 return BadRequest();
             }
-            return CreatedAtAction(nameof(Get), new {id= order.OrderId }, order);
+          // return CreatedAtAction(nameof(Get), new {id= _order.OrderId }, _order);
+           return Ok(_order);
 
         }
 

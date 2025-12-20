@@ -8,7 +8,7 @@ namespace DTOs
 {
     public record ProductDTO
     (
-         int ProductId ,
+        // int ProductId ,
 
          string ProductName,
 

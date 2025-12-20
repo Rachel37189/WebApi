@@ -2,7 +2,7 @@
 {
     public record CategoryDTO
     (
-         int CategoryId,
+         //int CategoryId,
 
         string CategoryName 
 

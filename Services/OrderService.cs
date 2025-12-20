@@ -23,8 +23,8 @@ namespace Services
 
         public async Task<OrderDTO> addOrder(OrderDTO order)
         {
-            //return await _orderRepository.addOrder(order);
-            Order order2 = await _orderRepository.addOrder(_mapper.Map<OrderDTO, Order>(order));
+           // Order order2 = await _orderRepository.addOrder(order);
+           Order order2 = await _orderRepository.addOrder(_mapper.Map<OrderDTO, Order>(order));
             OrderDTO orderDTO = _mapper.Map<Order, OrderDTO>(order2);
             return orderDTO;
         }

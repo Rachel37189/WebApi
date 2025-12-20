@@ -21,7 +21,7 @@ namespace Repository
         public async Task<Order> addOrder(Order order)
         {
             await _webApiShopContext.Orders.AddAsync(order);
-             await _webApiShopContext.SaveChangesAsync();
+            await _webApiShopContext.SaveChangesAsync();
             return order;
 
         }
