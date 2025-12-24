@@ -61,11 +61,11 @@ namespace WebApiShop.Controllers
         {
            UserDTO _user = await _userService.login(user);
             if (_user == null) {
-                _logger.LogInformation("Login failed: UserName={UserName},FirstName={FirstName},LastName={LastName}", user?.UserName,user?.FirstName, user?.LastName);
+                _logger.LogInformation("Login failed: UserName={UserName},Password={Password}", user.UserName,user.Password);
                 return NoContent() ;
             }
-            _logger.LogInformation("Login success: UserName={UserName},FirstName={FirstName},LastName={LastName}",
-             _user.UserName, _user.FirstName, _user.LastName);
+            _logger.LogInformation("Login success: UserName={UserName},Password={Password}",
+             user.UserName, user.Password);
             return Ok(_user);
 
         }
