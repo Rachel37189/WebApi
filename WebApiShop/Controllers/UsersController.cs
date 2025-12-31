@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using static WebApiShop.Controllers.UsersController;
 using Entities;
 using Repository;
 using Services;
+using DTOs;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace WebApiShop.Controllers
 {
@@ -10,28 +14,40 @@ namespace WebApiShop.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-
-        private readonly IUserService _userService ;
-        public UsersController(IUserService userService)
+        private readonly ILogger<UsersController> _logger;
+        public UsersController(ILogger<UsersController> logger, IUserService userService)
         {
+            _logger = logger;
             _userService = userService;
+        }
+        IUserService _userService ;
+        //public UsersController(IUserService userService)
+        //{
+        //    _userService = userService;
+        //}
+
+        // GET: api/<UsersController>
+        [HttpGet]
+        public IEnumerable<string> Get()
+        {
+            return new string[] { "value1", "value2" };
         }
 
         // GET api/<UsersController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> Get(int id)
+        public async Task<ActionResult<UserDTO>> Get(int id)
         {
            
-            User user= await _userService.GetUserById(id);
+            UserDTO user= await _userService.GetUserById(id);
             if (user == null)
-                   return NotFound();
+                   return NoContent();
             return Ok(user);
         }
         // POST api/<UsersController>
         [HttpPost]
-        public async Task<ActionResult<User>> Post([FromBody] User user)
+        public async Task<ActionResult<UserDTO>> Post([FromBody] User user)
         {
-           User _user = await _userService.AddUser(user);
+           UserDTO _user = await _userService.addUser(user);
             if (_user == null)
             {
                 return BadRequest("סיסמא חלשה - נסה סיסמא שונה");
@@ -41,11 +57,15 @@ namespace WebApiShop.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<ActionResult<User>> Login([FromBody] User user)
+        public async Task<ActionResult<UserDTO>> Login([FromBody] User user)
         {
-           User _user = await _userService.Login(user);
-            if (_user == null)
-                return Unauthorized("Invalid email or password.") ;
+           UserDTO _user = await _userService.login(user);
+            if (_user == null) {
+                _logger.LogInformation("Login failed: UserName={UserName},Password={Password}", user.UserName,user.Password);
+                return NoContent() ;
+            }
+            _logger.LogInformation("Login success: UserName={UserName},Password={Password}",
+             user.UserName, user.Password);
             return Ok(_user);
 
         }
@@ -53,8 +73,8 @@ namespace WebApiShop.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] User user)
         {
-            await _userService.UpdateUser(id, user);
-            return NoContent();
+            await _userService.updateUser(id, user);
+            return Ok(user);
         }
 
         // DELETE api/<UsersController>/5
@@ -63,3 +83,4 @@ namespace WebApiShop.Controllers
         {
         }
     }
+}

@@ -4,6 +4,7 @@ using static WebApiShop.Controllers.UsersController;
 using Entities;
 using Repository;
 using Services;
+using DTOs;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,10 +23,10 @@ namespace WebApiShop.Controllers
 
         // GET: api/<UsersController>
         [HttpGet]
-        public async Task<ActionResult<List<Category>>> Get()
+        public async Task<ActionResult<List<CategoryDTO>>> Get()
         {
-            List<Category> categories = await _categoryService.GetCategories();
-            if(categories == null || categories.Count == 0)
+            List<CategoryDTO> categories = await _categoryService.GetCategories();
+            if(categories == null || categories.Count() == 0)
                 return NoContent();
             return Ok(categories);  
         }
