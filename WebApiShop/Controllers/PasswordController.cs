@@ -21,7 +21,7 @@ namespace WebApiShop.Controllers
 
             PasswordEntity _passWord = await _pass.CheckPasswordStrength(pass);
             if (_passWord == null)
-                return NoContent();
+                return BadRequest("Invalid password");
 
             return Ok(_passWord.Strength);
         }

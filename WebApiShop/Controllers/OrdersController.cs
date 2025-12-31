@@ -35,7 +35,7 @@ namespace WebApiShop.Controllers
            
             OrderDTO order= await _orderService.GetOrderById(id);
             if (order == null)
-                   return NoContent();
+                   return NotFound();
             return Ok(order);
         }
         // POST api/<UsersController>

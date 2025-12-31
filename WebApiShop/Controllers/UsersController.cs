@@ -26,24 +26,19 @@ namespace WebApiShop.Controllers
         //    _userService = userService;
         //}
 
-        // GET: api/<UsersController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        
 
-        // GET api/<UsersController>/5
+      
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDTO>> Get(int id)
         {
            
             UserDTO user= await _userService.GetUserById(id);
             if (user == null)
-                   return NoContent();
+                   return NotFound();
             return Ok(user);
         }
-        // POST api/<UsersController>
+       
         [HttpPost]
         public async Task<ActionResult<UserDTO>> Post([FromBody] User user)
         {
@@ -62,14 +57,14 @@ namespace WebApiShop.Controllers
            UserDTO _user = await _userService.login(user);
             if (_user == null) {
                 _logger.LogInformation("Login failed: UserName={UserName},Password={Password}", user.UserName,user.Password);
-                return NoContent() ;
+                return Unauthorized("Invalid email or password.") ;
             }
             _logger.LogInformation("Login success: UserName={UserName},Password={Password}",
              user.UserName, user.Password);
             return Ok(_user);
 
         }
-        // PUT api/<UsersController>/5
+        
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] User user)
         {
@@ -77,10 +72,6 @@ namespace WebApiShop.Controllers
             return Ok(user);
         }
 
-        // DELETE api/<UsersController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        
     }
 }
