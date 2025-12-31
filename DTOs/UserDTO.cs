@@ -9,12 +9,12 @@ namespace DTOs
     public record UserDTO
     (
          int Id ,
-
+        [EmailAddress]
          string UserName ,
 
          string FirstName ,
 
          string LastName 
-      //  public string Password { get; set; }
+      
     );
 }

@@ -26,8 +26,6 @@ namespace WebApiShop.Controllers
         public async Task<ActionResult<List<CategoryDTO>>> Get()
         {
             List<CategoryDTO> categories = await _categoryService.GetCategories();
-            if(categories == null || categories.Count() == 0)
-                return NoContent();
             return Ok(categories);  
         }
 
