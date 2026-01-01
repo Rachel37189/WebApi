@@ -15,15 +15,17 @@ namespace Repository
         }
         public async Task<Order> GetOrderById(int id)
         {
-            return await _webApiShopContext.Orders.FindAsync(id);
+            return await _webApiShopContext.Orders.FirstOrDefaultAsync(o=>o.OrderId==id);
         }
 
-        public async Task<Order> addOrder(Order order)
+        public async Task<Order> addOrder(Order? order)
         {
+            if (order == null)
+                throw new ArgumentNullException(nameof(order), "Order cannot be null");
+
             await _webApiShopContext.Orders.AddAsync(order);
             await _webApiShopContext.SaveChangesAsync();
             return order;
-
         }
 
     }

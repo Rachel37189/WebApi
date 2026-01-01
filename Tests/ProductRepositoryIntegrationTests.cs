@@ -1,0 +1,53 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Entities;
+using Repository;
+
+namespace Tests
+{
+    public class ProductRepositoryIntegrationTests : IClassFixture<DbFixture>
+    {
+
+        private readonly WebApiShop_215602996Context _context;
+        private readonly ProductRepository _repository;
+
+        public ProductRepositoryIntegrationTests(DbFixture fixture)
+        {
+            _context = fixture.Context;
+            _repository = new ProductRepository(_context);
+            _context.ChangeTracker.Clear();
+        }
+        #region HappyTest
+        [Fact]
+        public async Task GetProducts_ShouldReturnAllProducts()
+        {
+            // Arrange
+            var product = new Product { ProductName = "TestProduct", Price = 50 };
+            await _context.Products.AddAsync(product);
+            await _context.SaveChangesAsync();
+
+            // Act
+            var result = await _repository.GetProducts(null, null, null, null, null);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Contains(result, p => p.ProductName == "TestProduct");
+        }
+        #endregion
+        #region UnHappyTests
+        [Fact]
+        public async Task GetProducts_WhenNoProducts_ReturnsEmptyList()
+        {
+            var result = await _repository.GetProducts(null, null, null, null, null);
+
+            Assert.NotNull(result);
+            Assert.Empty(result);
+        }
+
+            #endregion
+        }
+    }
+

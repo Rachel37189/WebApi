@@ -9,6 +9,7 @@ namespace Repository;
 
 public partial class WebApiShop_215602996Context : DbContext
 {
+    public WebApiShop_215602996Context() { }
     public WebApiShop_215602996Context(DbContextOptions<WebApiShop_215602996Context> options)
         : base(options)
     {

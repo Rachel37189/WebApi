@@ -15,16 +15,18 @@ namespace Repository
         }
         public async Task<User> GetUserById(int id)
         {
-            return await _webApiShopContext.Users.FindAsync(id);
+            return await _webApiShopContext.Users.FirstOrDefaultAsync(u=>u.Id==id);
         }
-                                                                                                                     
-        public  async Task<User> addUser(User user)
+        public async Task<User> addUser(User? user)
         {
+            if (user == null)
+                throw new ArgumentNullException(nameof(user), "User cannot be null");
+
             await _webApiShopContext.Users.AddAsync(user);
             await _webApiShopContext.SaveChangesAsync();
-            return  user;
-
+            return user;
         }
+       
         public async Task updateUser(int id, User user)
         {
              _webApiShopContext.Users.Update(user);
