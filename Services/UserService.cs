@@ -29,8 +29,8 @@ namespace Services
                 return null;
 
             // return await _userRepository.addUser(user);
-            User user1 = await _userRepository.addUser(user);
-            UserDTO userDTO = _mapper.Map<User, UserDTO>(user1);
+            User userCreated = await _userRepository.addUser(user);
+            UserDTO userDTO = _mapper.Map<User, UserDTO>(userCreated);
             return userDTO;
         }
         public async Task updateUser(int id, User user)
@@ -40,9 +40,9 @@ namespace Services
         }
         public async Task<UserDTO> login(User user)
         {
-            // return await _userRepository.login(user);
-            User user3 = await _userRepository.login(user);
-            UserDTO userDTO = _mapper.Map<User,UserDTO>(user3);
+          
+            User userLoggedIn = await _userRepository.login(user);
+            UserDTO userDTO = _mapper.Map<User,UserDTO>(userLoggedIn);
             return userDTO;
         }
     }
