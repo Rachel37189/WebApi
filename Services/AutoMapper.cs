@@ -6,9 +6,9 @@ namespace Services
 {
     public class AutoMapper:Profile
     {
-       public AutoMapper() { 
-        
-            CreateMap<User,UserDTO>().ReverseMap();
+       public AutoMapper() {
+            CreateMap<UserDTO, User>();            
+            CreateMap<User,GetUserDTO>().ReverseMap();
             CreateMap<Product,ProductDTO>().ReverseMap();
             CreateMap<Order, OrderDTO>().ReverseMap();
             CreateMap<Category, CategoryDTO>().ReverseMap();

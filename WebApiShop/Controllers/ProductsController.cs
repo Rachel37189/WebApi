@@ -6,7 +6,6 @@ using Services;
 using System.Security.Cryptography;
 using System.Text.Json;
 using static WebApiShop.Controllers.UsersController;
-using DTOs;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,24 +15,28 @@ namespace WebApiShop.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-
         IProductService _productService;
-        public ProductsController (IProductService productService)
+        public ProductsController(IProductService productService)
         {
             _productService = productService;
         }
 
         // GET: api/<UsersController>
         [HttpGet]
-        public async  Task<ActionResult<List<ProductDTO>>> Get(int? Product_Id, string? name, float? price, int? CategoryId, string? descripion)
+        public async Task<ActionResult<List<ProductDTO>>> Get(
+            int position,
+            int skip,
+            int? productId,
+            string? name,
+            float? minPrice,
+            float? maxPrice,
+            int[]? categoryIds,
+            string? descripion)
         {
-            //return await _productService.GetProducts(Product_Id, name, price, CategoryId, descripion);
-            List<ProductDTO> product = await _productService.GetProducts(Product_Id, name, price, CategoryId, descripion);
+            var product = await _productService.GetProducts(position, skip, productId, name, minPrice, maxPrice, categoryIds, descripion);
             if (product == null)
                 return NoContent();
             return Ok(product);
         }
-
-   
     }
 }

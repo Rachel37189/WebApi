@@ -29,7 +29,7 @@ namespace Tests
             var repo = new ProductRepository(mockContext.Object);
 
             // Act
-            var result = await repo.GetProducts(null, null, null, null, null);
+            var result = await repo.GetProducts(0,0 ,null, null, null,null,null,null);
 
             // Assert
             Assert.NotNull(result);
@@ -49,7 +49,7 @@ namespace Tests
             var repo = new ProductRepository(mockContext.Object);
 
             // Act
-            var result = await repo.GetProducts(null, null, null, null, null);
+            var result = await repo.GetProducts(0,0,null, null, null, null, null,null);
 
             // Assert
             Assert.NotNull(result);

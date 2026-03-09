@@ -41,7 +41,7 @@ namespace Tests
         [Fact]
         public async Task GetProducts_WhenNoProducts_ReturnsEmptyList()
         {
-            var result = await _repository.GetProducts(null, null, null, null, null);
+            var result = await _repository.GetProducts(0,0,null, null, null, null, null,null);
 
             Assert.NotNull(result);
             Assert.Empty(result);

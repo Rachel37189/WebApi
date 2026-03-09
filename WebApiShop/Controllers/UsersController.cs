@@ -12,69 +12,61 @@ namespace WebApiShop.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+       public class UsersController : ControllerBase
     {
         private readonly ILogger<UsersController> _logger;
+        private readonly IUserService _userService;
         public UsersController(ILogger<UsersController> logger, IUserService userService)
         {
             _logger = logger;
             _userService = userService;
         }
-        IUserService _userService ;
-        //public UsersController(IUserService userService)
-        //{
-        //    _userService = userService;
-        //}
-
-        // GET: api/<UsersController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<UsersController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<UserDTO>> Get(int id)
+
+        public async Task<ActionResult<GetUserDTO>> Get(int id)
         {
-           
-            UserDTO user= await _userService.GetUserById(id);
+
+            GetUserDTO user = await _userService.GetUserById(id);
             if (user == null)
-                   return NoContent();
+                return NoContent();
             return Ok(user);
         }
+
+
         // POST api/<UsersController>
         [HttpPost]
-        public async Task<ActionResult<UserDTO>> Post([FromBody] User user)
+        public async Task<ActionResult<GetUserDTO>> Post([FromBody] UserDTO user)
         {
-           UserDTO _user = await _userService.addUser(user);
+            GetUserDTO _user = await _userService.AddUser(user);
             if (_user == null)
             {
                 return BadRequest("סיסמא חלשה - נסה סיסמא שונה");
             }
-            return CreatedAtAction(nameof(Get), new { id = user.Id }, user);
+            return CreatedAtAction(nameof(Get), new { id = _user.Id }, _user);
 
         }
 
         [HttpPost("Login")]
-        public async Task<ActionResult<UserDTO>> Login([FromBody] User user)
+        public async Task<ActionResult<GetUserDTO>> Login([FromBody] LoginDTO loginDto)
         {
-           UserDTO _user = await _userService.login(user);
-            if (_user == null) {
-                _logger.LogInformation("Login failed: UserName={UserName},Password={Password}", user.UserName,user.Password);
-                return NoContent() ;
+            GetUserDTO _user = await _userService.Login(loginDto);
+            if (_user == null)
+            {
+                _logger.LogInformation("Login failed: UserName={UserName},Password={Password}", loginDto.UserName, loginDto.Password);
+                return NoContent();
             }
             _logger.LogInformation("Login success: UserName={UserName},Password={Password}",
-             user.UserName, user.Password);
+             loginDto.UserName, loginDto.Password);
             return Ok(_user);
 
         }
         // PUT api/<UsersController>/5
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] User user)
+        public async Task<IActionResult> Put(int id, [FromBody] UserDTO userDto)
         {
-            await _userService.updateUser(id, user);
-            return Ok(user);
+            await _userService.UpdateUser(id, userDto);
+            return Ok(userDto);
         }
 
         // DELETE api/<UsersController>/5
@@ -84,3 +76,12 @@ namespace WebApiShop.Controllers
         }
     }
 }
+
+
+
+
+
+
+
+
+

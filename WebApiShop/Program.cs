@@ -2,6 +2,7 @@
 using NLog.Web;
 using Repository;
 using Services;
+using WebApiShop.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,9 +24,13 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IRatingRepository, RatingRepository>();
+builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();
-if(app.Environment.IsDevelopment())
+app.UseErrorHandlingMiddleware();
+app.UseRating();
+if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
     app.UseSwaggerUI(Options =>

@@ -6,44 +6,66 @@ namespace Services
 {
     public class UserService : IUserService
     {
-        IUserRepository _userRepository;
-        IPasswordService _passwordService;
-        IMapper _mapper;
+        private readonly IUserRepository _userRepository;
+        private readonly IPasswordService _passwordService;
+        private readonly IMapper _mapper;
 
-        public UserService (IUserRepository userRepository, IPasswordService passwordService, IMapper mapper)
+        public UserService(IUserRepository userRepository, IPasswordService passwordService, IMapper mapper)
         {
             _userRepository = userRepository;
             _passwordService = passwordService;
-            _mapper=mapper;
+            _mapper = mapper;
         }
-        public async Task<UserDTO> GetUserById(int id)
+
+        public async Task<GetUserDTO> GetUserById(int id)
         {
-            //return await _userRepository.GetUserById(id);
-            User user = await _userRepository.GetUserById(id);
-            UserDTO userDTO = _mapper.Map<User,UserDTO>(user);
+
+            User? user = await _userRepository.GetUserById(id);
+            if (user == null)
+                return null;
+            GetUserDTO userDTO = _mapper.Map<GetUserDTO>(user);
             return userDTO;
         }
-        public async Task<UserDTO> addUser(User user)
+
+        public async Task<GetUserDTO> AddUser(UserDTO userDto)
         {
-            if (_passwordService.Level(user.Password).Strength <= 2)
+            User user = _mapper.Map<User>(userDto);
+            if ((await _passwordService.CheckPasswordStrength(user.Password)).Strength <= 2)
                 return null;
 
-            // return await _userRepository.addUser(user);
-            User user1 = await _userRepository.addUser(user);
-            UserDTO userDTO = _mapper.Map<User, UserDTO>(user1);
+            User user1 = await _userRepository.AddUser(user);
+            GetUserDTO userDTO = _mapper.Map<GetUserDTO>(user1);
             return userDTO;
         }
-        public async Task updateUser(int id, User user)
+
+        public async Task<GetUserDTO> Login(LoginDTO loginDto)
         {
-            await _userRepository.updateUser(id, user);
+
+            User user3 = await _userRepository.Login(loginDto);
+            //if (user == null)
+            //    return null;
+            GetUserDTO userDTO = _mapper.Map<GetUserDTO>(user3);
+            return userDTO;
+        }
+        public async Task UpdateUser(int id, UserDTO userDto)
+        {
+            await _userRepository.UpdateUser(id, userDto);
 
         }
-        public async Task<UserDTO> login(User user)
-        {
-            // return await _userRepository.login(user);
-            User user3 = await _userRepository.login(user);
-            UserDTO userDTO = _mapper.Map<User,UserDTO>(user3);
-            return userDTO;
-        }
+      
+
+
+
     }
 }
+
+
+
+
+
+
+
+     
+
+
+  
