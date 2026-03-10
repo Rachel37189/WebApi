@@ -30,7 +30,7 @@ namespace WebApiShop.Controllers
             string? name,
             float? minPrice,
             float? maxPrice,
-            int[]? categoryIds,
+            [FromQuery] int[]? categoryIds,
             string? descripion)
         {
             var product = await _productService.GetProducts(position, skip, productId, name, minPrice, maxPrice, categoryIds, descripion);

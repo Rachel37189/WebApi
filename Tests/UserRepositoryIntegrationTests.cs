@@ -1,4 +1,5 @@
 ﻿using Xunit;
+using DTOs;
 using Entities;
 using Repository;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +25,7 @@ namespace Tests {
         {
             var user = new User { UserName = "integration@test.com", Password = "123", FirstName = "Test", LastName = "User" };
 
-            var result = await _repository.addUser(user);
+            var result = await _repository.AddUser(user);
 
             var userInDb = await _context.Users.FindAsync(result.Id);
             Assert.NotNull(userInDb);
@@ -38,8 +39,9 @@ namespace Tests {
 
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
+            var loginDto = new LoginDTO("login@integration.com","password123" );
 
-            var result = await _repository.login(user);
+            var result = await _repository.Login(loginDto);
 
             Assert.NotNull(result);
             Assert.Equal("login@integration.com", result.UserName);
@@ -61,13 +63,9 @@ namespace Tests {
             await _context.SaveChangesAsync();
             _context.ChangeTracker.Clear();
 
-            var loginAttempt = new User
-            {
-                UserName = "fail@test.com",
-                Password = "wrong"
-            };
+            var loginAttempt = new LoginDTO("fail@test.com","wrong");
 
-            var result = await _repository.login(loginAttempt);
+            var result = await _repository.Login(loginAttempt);
 
             Assert.Null(result);
         }
@@ -77,10 +75,10 @@ namespace Tests {
             var user1 = new User { UserName = "dup@test.com", Password = "123" };
             var user2 = new User { UserName = "dup@test.com", Password = "456" };
 
-            await _repository.addUser(user1);
+            await _repository.AddUser(user1);
 
             await Assert.ThrowsAsync<DbUpdateException>(() =>
-                _repository.addUser(user2));
+                _repository.AddUser(user2));
         }
 
 

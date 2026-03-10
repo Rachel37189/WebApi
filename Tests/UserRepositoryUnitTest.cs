@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DTOs;
 using Entities;
 using Moq;
 using Repository;
@@ -46,7 +47,7 @@ namespace Tests
             var user = new User { UserName = "new@test.com",FirstName="aaa",LastName="bbb", Password = "123" };
 
             // Act
-            var result = await repo.addUser(user);
+            var result = await repo.AddUser(user);
 
             // Assert
 
@@ -67,9 +68,10 @@ namespace Tests
 
             var repo = new UserRepository(mockContext.Object);
             user.UserName = "updated@test.com";
-
+            var userDto = new UserDTO("updated@test.com", "1", "A", "B");
             // Act
-            await repo.updateUser(1, user);
+
+            await repo.UpdateUser(1, userDto);
 
             // Assert
             Assert.Equal("updated@test.com", users[0].UserName);
@@ -89,7 +91,7 @@ namespace Tests
             var repo = new UserRepository(mockContext.Object);
 
             // Act
-            var result = await repo.login(new User { UserName = "login@test.com", Password = "pass" });
+            var result = await repo.Login(new LoginDTO ( "login@test.com", "pass" ));
 
             // Assert
             Assert.NotNull(result);
@@ -111,7 +113,7 @@ namespace Tests
             var repo = new UserRepository(mockContext.Object);
 
             // Act
-            var result = await repo.login(new User { UserName= "fake@test.com", Password = "0000" });
+            var result = await repo.Login(new LoginDTO ( "fake@test.com", "0000"));
 
             // Assert
             Assert.Null(result);
@@ -153,11 +155,11 @@ namespace Tests
             var repo = new UserRepository(mockContext.Object);
 
             // Act
-            var result = await repo.login(new User
-            {
-                UserName = "test@test.com",
-                Password = "WRONG"
-            });
+            var result = await repo.Login(new LoginDTO("test@test.com", "WRONG"));
+
+
+
+
 
             // Assert
             Assert.Null(result);
@@ -172,7 +174,7 @@ namespace Tests
 
             // Act + Assert
             await Assert.ThrowsAsync<ArgumentNullException>(
-                () => repo.addUser(null)
+                () => repo.AddUser(null)
             );
         }
 

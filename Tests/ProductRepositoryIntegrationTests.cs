@@ -25,12 +25,27 @@ namespace Tests
         public async Task GetProducts_ShouldReturnAllProducts()
         {
             // Arrange
-            var product = new Product { ProductName = "TestProduct", Price = 50 };
+            var category = new Category
+            {
+                CategoryName = "Books"
+            };
+
+            await _context.Categories.AddAsync(category);
+            await _context.SaveChangesAsync();
+
+            var product = new Product
+            {
+                ProductName = "TestProduct",
+                Price = 50,
+                CategoryId = category.CategoryId,
+                Description = "Test description"
+            };
+
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
 
             // Act
-            var result = await _repository.GetProducts(null, null, null, null, null);
+            var result = await _repository.GetProducts(1, 10, null, null, null, null, null, null);
 
             // Assert
             Assert.NotNull(result);

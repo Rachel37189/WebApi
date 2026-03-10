@@ -14,10 +14,10 @@ namespace DTOs
 
          double OrderSum,
 
-         int UserId 
+         int UserId ,
 
-        // virtual ICollection<OrderItemDTO> OrderItems { get; set; } = new List<OrderItemDTO>();
+         ICollection<OrderItemDTO> OrderItems
 
-       // public virtual User User { get; set; }
+
     );
 }

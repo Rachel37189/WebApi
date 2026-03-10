@@ -9,6 +9,7 @@ The project is structured into clearly separated layers to ensure **maintainabil
 | Layer | Responsibility |
 | :--- | :--- |
 | **Application** | Entry point (Controllers), Middleware, and API Orchestration. |
+
 | **Services** | Core business logic and domain operations. |
 | **Repositories** | Data access abstraction and Database communication. |
 | **Entities** | Database models (generated via Database First). |

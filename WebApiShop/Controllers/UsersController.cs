@@ -69,11 +69,7 @@ namespace WebApiShop.Controllers
             return Ok(userDto);
         }
 
-        // DELETE api/<UsersController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+      
     }
 }
 
