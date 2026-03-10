@@ -7,8 +7,8 @@ namespace Services
 {
     public class ProductService : IProductService
     {
-        IProductRepository _productRepository;
-        IMapper _mapper;
+        private readonly IProductRepository _productRepository;
+        private readonly IMapper _mapper;
 
         public ProductService(IProductRepository productRepository, IMapper mapper)
         {

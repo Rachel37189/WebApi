@@ -11,7 +11,7 @@ namespace Repository
     public class RatingRepository : IRatingRepository
     {
 
-        WebApiShop_215602996Context _webApiShopContext;
+        private readonly WebApiShop_215602996Context _webApiShopContext;
         public RatingRepository(WebApiShop_215602996Context webApiShopContext)
         {
             _webApiShopContext = webApiShopContext;
