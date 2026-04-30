@@ -115,24 +115,29 @@ public partial class WebApiShop_215602996Context : DbContext
 
             entity.Property(e => e.Host)
                 .HasColumnName("HOST")
-                .HasMaxLength(50);
+                .HasMaxLength(50)
+            .IsRequired(false);
 
             entity.Property(e => e.Method)
                 .HasColumnName("METHOD")
                 .HasMaxLength(10)
-                .IsFixedLength();
+                .IsFixedLength()
+                .IsRequired(false);
 
             entity.Property(e => e.Path)
                 .HasColumnName("PATH")
-                .HasMaxLength(50);
+                .HasMaxLength(50)
+                .IsRequired(false);
 
             entity.Property(e => e.RecordDate)
              .HasColumnName("Record_Date")
-             .HasColumnType("datetime");
+             .HasColumnType("datetime")
+             .IsRequired(false);
 
             entity.Property(e => e.Referer)
                 .HasColumnName("REFERER")
-                .HasMaxLength(100);
+                .HasMaxLength(100)
+                .IsRequired(false);
 
             entity.Property(e => e.UserAgent).HasColumnName("USER_AGENT");
         });

@@ -14,6 +14,10 @@ builder.Services.AddDbContext<WebApiShop_215602996Context>(options =>
 ));
 builder.Host.UseNLog();
 builder.Services.AddControllers();
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = "localhost:6379";
+});
 builder.Services.AddOpenApi();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
