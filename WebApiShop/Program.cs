@@ -34,6 +34,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();
 app.UseErrorHandlingMiddleware();
 app.UseRating();
+app.UseMiddleware<RateLimitMiddleware>();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
