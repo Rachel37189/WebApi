@@ -5,7 +5,7 @@ using Entities;
 using Repository;
 using Services;
 using DTOs;
-
+using Microsoft.AspNetCore.Authorization;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace WebApiShop.Controllers
@@ -16,11 +16,14 @@ namespace WebApiShop.Controllers
     {
         private readonly ILogger<UsersController> _logger;
         private readonly IUserService _userService;
-        public UsersController(ILogger<UsersController> logger, IUserService userService)
+        private readonly JwtService _jwtService;
+        public UsersController(ILogger<UsersController> logger, IUserService userService, JwtService jwtService)
         {
             _logger = logger;
             _userService = userService;
+            _jwtService = jwtService;
         }
+        [Authorize]
         [HttpGet("{id}")]
 
         public async Task<ActionResult<GetUserDTO>> Get(int id)
@@ -57,7 +60,14 @@ namespace WebApiShop.Controllers
             }
             _logger.LogInformation("Login success: UserName={UserName},Password={Password}",
              loginDto.UserName, loginDto.Password);
-            return Ok(_user);
+
+            string token = _jwtService.GenerateToken(_user.Id, _user.UserName);
+
+            return Ok(new
+            {
+                Token = token,
+                User = _user
+            });
 
         }
         // PUT api/<UsersController>/5
