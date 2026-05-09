@@ -13,7 +13,7 @@
     Id:0
 };
 
-    const responsePost = await fetch("https://localhost:44320/api/Users", {
+    const responsePost = await fetch("https://localhost:7296/api/Users", {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json'
@@ -22,7 +22,7 @@
 });
 
     const dataPost = await responsePost.json();
-    sessionStorage.setItem("user", JSON.stringify(dataPost))
+    sessionStorage.setItem("user", JSON.stringify(dataPost).user)
     if (responsePost.status == 201)
         alert("משתמש נוסף בהצלחה");
     else if (responsePost.status == 400)
@@ -44,7 +44,7 @@ const login = async () => {
         Id: 0
     };
 
-    const responsePostLogin = await fetch("https://localhost:44320/api/Users/Login", {
+    const responsePostLogin = await fetch("https://localhost:7296/api/Users/Login", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -56,7 +56,7 @@ const login = async () => {
    
     if (responsePostLogin.ok) {
         const dataPostLogin = await responsePostLogin.json();
-        sessionStorage.setItem("user", JSON.stringify(dataPostLogin))
+        sessionStorage.setItem("user", JSON.stringify(dataPostLogin.user))
         alert("wellcome!!!!!!!")
         window.location.href = "../Update.html"
     }

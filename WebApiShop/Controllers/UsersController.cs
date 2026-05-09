@@ -62,7 +62,15 @@ namespace WebApiShop.Controllers
              loginDto.UserName, loginDto.Password);
 
             string token = _jwtService.GenerateToken(_user.Id, _user.UserName);
-
+            Response.Cookies.Append("jwt", token, new CookieOptions
+            {
+                HttpOnly = true,
+                //Secure = true,
+                //SameSite = SameSiteMode.None,
+                Secure = false,
+                SameSite = SameSiteMode.Lax,
+                Expires = DateTime.Now.AddHours(1)
+            });
             return Ok(new
             {
                 Token = token,
