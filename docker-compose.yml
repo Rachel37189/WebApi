@@ -6,3 +6,46 @@ services:
     container_name: my-redis
     ports:
       - "6379:6379"
+    environment:
+      - REDIS_PASSWORD=your_redis_password
+    networks:
+      - webapi-network
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver-db
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=YourStrong!Passw0rd
+      - MSSQL_PID=Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    networks:
+      - webapi-network
+
+  webapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: webapi-shop
+    ports:
+      - "80:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=sqlserver-db;Database=WebApiShop_215602996;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True
+    depends_on:
+      - redis
+      - sqlserver
+    networks:
+      - webapi-network
+    restart: unless-stopped
+
+networks:
+  webapi-network:
+    driver: bridge
+
+volumes:
+  sqlserver_data:
