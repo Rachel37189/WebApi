@@ -2,6 +2,7 @@
 using DTOs;
 using Entities;
 using Repository;
+using BCrypt.Net;
 namespace Services
 {
     public class UserService : IUserService
@@ -32,6 +33,7 @@ namespace Services
             User user = _mapper.Map<User>(userDto);
             if ((await _passwordService.CheckPasswordStrength(user.Password)).Strength <= 2)
                 return null;
+            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
             User user1 = await _userRepository.AddUser(user);
             GetUserDTO userDTO = _mapper.Map<GetUserDTO>(user1);

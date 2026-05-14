@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Repository;
 using System.Reflection.Metadata;
 using System.Text.Json;
+
 namespace Repository
 {
     public class UserRepository : IUserRepository
@@ -43,9 +44,35 @@ namespace Repository
 
             await _webApiShopContext.SaveChangesAsync();
         }
-        public async Task<User> Login(LoginDTO loginDto)
+        //public async Task<User> Login(LoginDTO loginDto)
+        //{
+        //    return await _webApiShopContext.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.UserName && x.Password == loginDto.Password);
+        //}
+        public async Task<User?> Login(LoginDTO loginDto)
         {
-            return await _webApiShopContext.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.UserName && x.Password == loginDto.Password);
+            User? user = await _webApiShopContext.Users
+                .FirstOrDefaultAsync(x =>
+                    x.UserName == loginDto.UserName);
+
+            if (user == null)
+                return null;
+
+            bool isPasswordCorrect = false;
+
+            try
+            {
+                isPasswordCorrect =
+                    BCrypt.Net.BCrypt.Verify(loginDto.Password, user.Password);
+            }
+            catch
+            {
+                return null;
+            }
+
+            if (!isPasswordCorrect)
+                return null;
+
+            return user;
         }
     }
 }

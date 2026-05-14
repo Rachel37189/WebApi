@@ -55,8 +55,9 @@ namespace WebApiShop.Controllers
             GetUserDTO _user = await _userService.Login(loginDto);
             if (_user == null)
             {
-                _logger.LogInformation("Login failed: UserName={UserName},Password={Password}", loginDto.UserName, loginDto.Password);
-                return NoContent();
+                _logger.LogInformation("Login failed: UserName={UserName}", loginDto.UserName);
+
+                return Unauthorized("Invalid username or password");
             }
             _logger.LogInformation("Login success: UserName={UserName},Password={Password}",
              loginDto.UserName, loginDto.Password);
