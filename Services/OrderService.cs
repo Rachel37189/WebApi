@@ -11,12 +11,16 @@ namespace Services
         private readonly IProductRepository _productRepository;
         private readonly ILogger<OrderService> _logger;
         private readonly IMapper _mapper;
-        public OrderService(IOrderRepository orderRepository, IMapper mapper, IProductRepository productRepository, ILogger<OrderService> logger)
+        private readonly IKafkaProducerService _kafkaProducerService;
+        public OrderService(IOrderRepository orderRepository,
+            IMapper mapper, IProductRepository productRepository, 
+            ILogger<OrderService> logger, IKafkaProducerService kafkaProducerService)
         {
             _orderRepository = orderRepository;
              _mapper=mapper;
             _productRepository = productRepository;
             _logger = logger;
+            _kafkaProducerService = kafkaProducerService;
 
         }
         public async Task<OrderDTO> GetOrderById(int id)
@@ -48,6 +52,10 @@ namespace Services
             }
 
             Order savedOrder = await _orderRepository.addOrder(order);
+            string kafkaMessage =
+                $"New Order Created | OrderId: {savedOrder.OrderId} | UserId: {savedOrder.UserId} | Sum: {savedOrder.OrderSum}";
+
+            await _kafkaProducerService.ProduceAsync(kafkaMessage);
             return _mapper.Map<OrderDTO>(savedOrder);
         }
     }

@@ -10,7 +10,7 @@ COPY ["Repository/Repository.csproj", "Repository/"]
 COPY ["Entities/Entities.csproj", "Entities/"]
 COPY ["DTOs/DTOs.csproj", "DTOs/"]
 COPY ["Tests/Tests.csproj", "Tests/"]
-
+COPY ["KafkaConsumer/KafkaConsumer.csproj", "KafkaConsumer/"]
 # Restore dependencies
 RUN dotnet restore
 
