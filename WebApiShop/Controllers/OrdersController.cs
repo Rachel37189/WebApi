@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using static WebApiShop.Controllers.UsersController;
 using Entities;
@@ -6,6 +6,7 @@ using Repository;
 using Services;
 using DTOs;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -43,6 +44,7 @@ namespace WebApiShop.Controllers
         }
         // POST api/<UsersController>
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<OrderDTO>> Post([FromBody] OrderDTO order)
         {
             Order orderEntity = _mapper.Map<Order>(order);

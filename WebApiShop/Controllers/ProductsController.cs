@@ -1,4 +1,4 @@
-﻿using DTOs;
+using DTOs;
 using Entities;
 using Microsoft.AspNetCore.Mvc;
 using Repository;
@@ -9,10 +9,13 @@ using static WebApiShop.Controllers.UsersController;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
+using Microsoft.AspNetCore.RateLimiting;
+
 namespace WebApiShop.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableRateLimiting("fixed")]
     public class ProductsController : ControllerBase
     {
         IProductService _productService;
