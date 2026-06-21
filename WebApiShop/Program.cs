@@ -46,9 +46,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.Configuration = "localhost:6379";
+    options.Configuration = builder.Configuration["Redis:ConnectionString"];
 });
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -94,7 +93,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();
 app.UseErrorHandlingMiddleware();
 app.UseRating();
-//app.UseMiddleware<RateLimitMiddleware>();
+app.UseMiddleware<RateLimitMiddleware>();
 if (app.Environment.IsDevelopment())
 {
     //app.MapOpenApi();

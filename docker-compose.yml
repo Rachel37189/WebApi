@@ -23,6 +23,8 @@ services:
     image: redis:latest
     container_name: my-redis
 
+    command: redis-server --requirepass "RedisStrong!Pass123"
+
     ports:
       - "6379:6379"
 
