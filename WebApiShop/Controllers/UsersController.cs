@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using static WebApiShop.Controllers.UsersController;
 using Entities;
@@ -82,6 +82,7 @@ namespace WebApiShop.Controllers
         // PUT api/<UsersController>/5
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> Put(int id, [FromBody] UserDTO userDto)
         {
             await _userService.UpdateUser(id, userDto);
